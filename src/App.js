@@ -1,24 +1,55 @@
-import logo from './logo.svg';
+
+import { Box} from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+
 import './App.css';
+import _ from "lodash"; 
+import SearchBar from './components/SearchBar';
+import Description from './components/Description';
+import VideoList from './components/VideoList';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+const API_KEY='AIzaSyDE2Zch5L4wGA6IGHm441IQaxzRCrFNdZ0';
+const URL='https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDE2Zch5L4wGA6IGHm441IQaxzRCrFNdZ0&type=video&q=';
+
 
 function App() {
+    
+    const [videoDesc, setVideoDesc]=useState();
+    const [videoList, setVideoList]=useState([]);
+    const [videos,setVideos] =useState();
+    const onChange=(term)=>{
+
+    axios.get(`${URL}${term}`).then(res =>{
+      setVideoDesc(res.data.items[0]);
+      setVideoList(res.data.items);
+      
+    })
+    
+  }
+  const onVideoSelection =(id)=>{
+    setVideoDesc(videos.items[id]);
+
+  }
+  useEffect(()=>{
+    axios.get(`${URL}cartoon`).then(res => {
+      setVideos(res.data);
+      setVideoDesc(res.data.items[0]);
+      setVideoList(res.data.items);
+    })
+    
+  },[]);
+  const videoSearch =_.debounce(term => onChange(term),300);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box sx={{flexGrow: 1, p:"0 20px" }}>
+      <SearchBar onChange={videoSearch}/>
+      <Grid container sx={{pt: "20px"}}>
+        <Description videoDesc={videoDesc}/>
+        <VideoList videoList={videoList} onVideoSelection={onVideoSelection}/>
+      </Grid>
+    </Box>
+       
   );
 }
 
