@@ -1,7 +1,7 @@
 import {Box} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 const Description=({videoDesc})=>{
-    const videoId= videoDesc?videoDesc.id.videoId:null;
+    const videoId = videoDesc ? videoDesc.id.videoId : null;
     return(
         <Grid xs={8}>
             <iframe 

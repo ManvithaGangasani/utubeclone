@@ -10,7 +10,7 @@ import VideoList from './components/VideoList';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const API_KEY='AIzaSyDE2Zch5L4wGA6IGHm441IQaxzRCrFNdZ0';
+
 const URL='https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDE2Zch5L4wGA6IGHm441IQaxzRCrFNdZ0&type=video&q=';
 
 
@@ -19,11 +19,12 @@ function App() {
     const [videoDesc, setVideoDesc]=useState();
     const [videoList, setVideoList]=useState([]);
     const [videos,setVideos] =useState();
-    const onChange=(term)=>{
 
-    axios.get(`${URL}${term}`).then(res =>{
-      setVideoDesc(res.data.items[0]);
-      setVideoList(res.data.items);
+    const onChange=(term)=>{
+      axios.get(`${URL}${term}`).then(res =>{
+        setVideos(res.data)
+        setVideoDesc(res.data.items[0]);
+        setVideoList(res.data.items);
       
     })
     
